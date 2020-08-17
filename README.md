@@ -1,3 +1,5 @@
 # scanee
 
-<img src="scan.png" alt="scan_image"></img>
+* Query the server
+* port is 80
+<img src="serve.png" alt="scan_image"></img>

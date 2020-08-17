@@ -16,14 +16,19 @@ func main(){
 
 	address := os.Args[1]
 
-	res := make(chan []byte)
+	res := make(chan []byte,2)
+	go GetIpAddr(address,res)
 	go serve(address,res)
 
+	theIpAddr := <-res
 	result := <-res //receive from res
 
+
+	fmt.Printf("The IP Address of %s is:\n %v\n\n",os.Args[1],string(theIpAddr))
 	fmt.Printf("%v ",string(result))
 }
 
+//Get server info
 func serve(addr string,c chan []byte) {
 
 	tcpAddr,err := net.ResolveTCPAddr("tcp4",addr+":80")
@@ -42,6 +47,24 @@ func serve(addr string,c chan []byte) {
 	Check(err)
 
 	c<-res //send to c channel
+}
+
+//Get ipaddress
+func GetIpAddr(hostname string,c chan []byte){
+	ipAddr,err := net.LookupHost(hostname)
+	Check(err)
+
+	var ip = []byte{}
+
+	for i,_ := range ipAddr{
+		b := []byte(ipAddr[i])
+		for j,_ := range b{
+			ip = append(ip,b[j])
+		}
+	}
+
+	c <- ip //send ip to c channel
+
 }
 
 func Check(e error) {
