@@ -20,11 +20,19 @@ func main(){
 	go GetIpAddr(address,res)
 	go serve(address,res)
 
-	theIpAddr := <-res
+	ipAddresses := <-res
 	result := <-res //receive from res
 
 
-	fmt.Printf("The IP Address of %s is:\n %v\n\n",os.Args[1],string(theIpAddr))
+	fmt.Printf("The IP Address of %s is:\n",os.Args[1])
+/*	for _,ipAddress := range ipAddresses{
+		fmt.Printf("%v",string(ipAddress))
+		fmt.Println("\n\n")
+	}
+*/
+	fmt.Println(string(ipAddresses))
+	fmt.Println("Server Response:")
+	fmt.Println("\n")
 	fmt.Printf("%v ",string(result))
 }
 
